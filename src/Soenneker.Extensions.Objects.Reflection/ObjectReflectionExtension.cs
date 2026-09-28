@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -37,6 +38,7 @@ public static partial class ObjectReflectionExtension
     /// <param name="source">The object to convert.</param>
     /// <returns>A dictionary of property names (or JSON names) to values.</returns>
     [Pure]
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     public static Dictionary<string, object?> ToDictionaryViaReflection(this object? source)
     {
         if (source is null)
@@ -63,6 +65,7 @@ public static partial class ObjectReflectionExtension
     /// <remarks>This string's first character is a question mark (unless the object is null, then it's null)</remarks>
     /// <returns>Uses Reflection to build a query string out of an object. If object is null, returns an empty string. Uses the object's property names as the keys of the query string.</returns>
     [Pure]
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     public static string ToQueryStringViaReflection(this object? obj, bool loweredPropertyNames = true)
     {
         if (obj is null)
@@ -106,6 +109,8 @@ public static partial class ObjectReflectionExtension
     /// <remarks>This string's first character is a question mark (unless the object is null, then it's null)</remarks>
     /// <returns>If object is null, returns an empty string.</returns>
     [Pure]
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
+    [RequiresDynamicCode("Serializing query values of runtime types may require runtime code generation.")]
     public static string ToQueryStringViaCachedReflection(this object? obj)
     {
         if (obj is null)
@@ -131,6 +136,7 @@ public static partial class ObjectReflectionExtension
         return queryBuilder.ToString();
     }
 
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     private static QueryProperty[] CreateQueryProperties(System.Type type)
     {
         PropertyInfo[] properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -171,6 +177,8 @@ public static partial class ObjectReflectionExtension
         return value.Equals(property.DefaultValue);
     }
 
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
+    [RequiresDynamicCode("Serializing query values of runtime types may require runtime code generation.")]
     private static string FormatQueryValue(object? value)
     {
         if (value is null)
@@ -195,6 +203,7 @@ public static partial class ObjectReflectionExtension
     /// </summary>
     /// <param name="obj">The object to inspect for null properties. Can be null.</param>
     /// <param name="logger">The logger to use for logging null properties.</param>
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     public static void LogNullPropertiesViaReflection(this object? obj, ILogger logger)
     {
         if (obj is null)
@@ -234,6 +243,7 @@ public static partial class ObjectReflectionExtension
     /// </summary>
     /// <param name="obj">The object to inspect for null properties.</param>
     /// <param name="logger">The logger to use for logging the null properties.</param>
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     public static void LogNullPropertiesRecursivelyAsJsonViaReflection(this object? obj, ILogger logger)
     {
         if (obj is null)
@@ -261,6 +271,7 @@ public static partial class ObjectReflectionExtension
         }
     }
 
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     private static Dictionary<string, object?> GetNullPropertiesTree(object obj, System.Type objectType, HashSet<object> visited)
     {
         // Pre-allocate dictionary capacity based on property count
@@ -374,6 +385,7 @@ public static partial class ObjectReflectionExtension
     /// </code>
     /// </example>
     [Pure]
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     public static string ToReadableStringViaReflection(this object obj, int indentLevel = 0)
     {
         if (obj == null)
@@ -391,6 +403,7 @@ public static partial class ObjectReflectionExtension
         }
     }
 
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     private static void AppendReadableString(object? obj, int indentLevel, ref PooledStringBuilder stringBuilder)
     {
         if (obj is null)
@@ -442,6 +455,7 @@ public static partial class ObjectReflectionExtension
         }
     }
 
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     private static PropertyInfo[] GetReadablePublicProperties(System.Type type) =>
         _publicPropCache.GetOrAdd(type, static t =>
         {
@@ -471,6 +485,7 @@ public static partial class ObjectReflectionExtension
             return filtered;
         });
 
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     private static (PropertyInfo[] Props, string[] Names) GetDeclaredProperties(System.Type type) =>
         _declaredPropCache.GetOrAdd(type, static t =>
         {

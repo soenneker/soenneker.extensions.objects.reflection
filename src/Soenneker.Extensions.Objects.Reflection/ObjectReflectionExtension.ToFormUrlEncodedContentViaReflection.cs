@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -21,6 +22,7 @@ public static partial class ObjectReflectionExtension
     /// Only top-level, readable instance properties are included.
     /// </summary>
     /// <returns>Converts an object into FormUrlEncodedContent using reflection, honoring JsonPropertyName attributes on properties. Only top-level, readable instance properties are included.</returns>
+    [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
     public static FormUrlEncodedContent ToFormUrlEncodedContentViaReflection(this object obj)
     {
         if (obj is null)
