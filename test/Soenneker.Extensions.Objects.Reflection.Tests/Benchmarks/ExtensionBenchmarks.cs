@@ -38,7 +38,7 @@ public class ExtensionBenchmarks
     public string LegacySerialization()
     {
         string serialized = JsonUtil.Serialize(_userDto)!;
-        Dictionary<string, JsonElement> dictionary = JsonUtil.Deserialize<Dictionary<string, JsonElement>>(serialized)!;
+        var dictionary = JsonUtil.Deserialize<Dictionary<string, JsonElement>>(serialized)!;
         using var builder = new PooledStringBuilder(dictionary.Count * 10);
         builder.Append('?');
 

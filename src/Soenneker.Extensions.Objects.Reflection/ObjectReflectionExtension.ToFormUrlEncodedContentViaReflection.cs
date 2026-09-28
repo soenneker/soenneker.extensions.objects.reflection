@@ -46,7 +46,7 @@ public static partial class ObjectReflectionExtension
             }
 
             int count = filtered.Count;
-            PropertyInfo[] propsArray = new PropertyInfo[count];
+            var propsArray = new PropertyInfo[count];
             var nameArr = new string[count];
             for (var i = 0; i < count; i++)
             {
