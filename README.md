@@ -33,26 +33,26 @@ string query = new SearchRequest
 ## Project properties
 
 ```csharp
-Dictionary<string, object?> values = model.ToDictionary();
+Dictionary<string, object?> values = model.ToDictionaryViaReflection();
 ```
 
-`ToDictionary()` includes only readable, non-indexed public properties declared directly on the runtime type. `[JsonPropertyName]` controls keys; inherited properties are excluded. Values are not serialized or cloned. A null source returns a new empty dictionary.
+`ToDictionaryViaReflection()` includes only readable, non-indexed public properties declared directly on the runtime type. `[JsonPropertyName]` controls keys; inherited properties are excluded. Values are not serialized or cloned. A null source returns a new empty dictionary.
 
 ## Create request bodies
 
 ```csharp
-using HttpContent json = request.ToHttpContent();
-using FormUrlEncodedContent form = request.ToFormUrlEncodedContent();
+using HttpContent json = request.ToHttpContentViaReflection();
+using FormUrlEncodedContent form = request.ToFormUrlEncodedContentViaReflection();
 ```
 
-`ToHttpContent()` serializes with `JsonUtil.WebOptions` into `application/json`; null produces an empty JSON-typed body, not the literal `null`. The caller owns and must dispose every returned content object.
+`ToHttpContentViaReflection()` serializes with `JsonUtil.WebOptions` into `application/json`; null produces an empty JSON-typed body, not the literal `null`. The caller owns and must dispose every returned content object.
 
-`ToFormUrlEncodedContent()` includes readable public properties, honors `[JsonPropertyName]`, skips nulls, formats `IFormattable` values invariantly, and lets `FormUrlEncodedContent` perform encoding. Nested objects and collections are converted through `ToString()` rather than flattened.
+`ToFormUrlEncodedContentViaReflection()` includes readable public properties, honors `[JsonPropertyName]`, skips nulls, formats `IFormattable` values invariantly, and lets `FormUrlEncodedContent` perform encoding. Nested objects and collections are converted through `ToString()` rather than flattened.
 
 ## Diagnostics
 
-- `LogNullProperties()` reports top-level null public properties.
-- `LogNullPropertiesRecursivelyAsJson()` traverses application objects and collections, tracks reference cycles, and logs a JSON tree containing only null locations.
-- `ToReadableString()` recursively renders public properties for human diagnostics.
+- `LogNullPropertiesViaReflection()` reports top-level null public properties.
+- `LogNullPropertiesRecursivelyAsJsonViaReflection()` traverses application objects and collections, tracks reference cycles, and logs a JSON tree containing only null locations.
+- `ToReadableStringViaReflection()` recursively renders public properties for human diagnostics.
 
-Reflection getters and custom `ToString()` implementations can execute user code and throw. Diagnostic output can contain secrets or personal data, and `ToReadableString()` does not protect against reference cycles; use these helpers only with known model types and appropriate logging destinations.
+Reflection getters and custom `ToString()` implementations can execute user code and throw. Diagnostic output can contain secrets or personal data, and `ToReadableStringViaReflection()` does not protect against reference cycles; use these helpers only with known model types and appropriate logging destinations.

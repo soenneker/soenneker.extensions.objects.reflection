@@ -8,10 +8,10 @@ namespace Soenneker.Extensions.Objects.Reflection.Tests;
 public class HttpContentReflectionTests
 {
     [Test]
-    public async System.Threading.Tasks.Task ToHttpContent_serializes_anonymous_objects()
+    public async System.Threading.Tasks.Task ToHttpContentViaReflection_serializes_anonymous_objects()
     {
         var payload = new { Query = "mutation", Variables = new { RepositoryId = "node\"id", Enabled = false } };
-        using HttpContent content = payload.ToHttpContent();
+        using HttpContent content = payload.ToHttpContentViaReflection();
         using JsonDocument document = JsonDocument.Parse(await content.ReadAsStringAsync());
 
         content.Headers.ContentType!.MediaType.Should().Be("application/json");
@@ -22,9 +22,9 @@ public class HttpContentReflectionTests
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToHttpContent_returns_empty_json_content_for_null()
+    public async System.Threading.Tasks.Task ToHttpContentViaReflection_returns_empty_json_content_for_null()
     {
-        using HttpContent content = ((object?)null).ToHttpContent();
+        using HttpContent content = ((object?)null).ToHttpContentViaReflection();
 
         (await content.ReadAsByteArrayAsync()).Should().BeEmpty();
         content.Headers.ContentType!.MediaType.Should().Be("application/json");

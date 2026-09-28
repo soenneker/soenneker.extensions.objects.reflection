@@ -21,7 +21,7 @@ public static partial class ObjectReflectionExtension
     /// Only top-level, readable instance properties are included.
     /// </summary>
     /// <returns>Converts an object into FormUrlEncodedContent using reflection, honoring JsonPropertyName attributes on properties. Only top-level, readable instance properties are included.</returns>
-    public static FormUrlEncodedContent ToFormUrlEncodedContent(this object obj)
+    public static FormUrlEncodedContent ToFormUrlEncodedContentViaReflection(this object obj)
     {
         if (obj is null)
             throw new ArgumentNullException(nameof(obj));

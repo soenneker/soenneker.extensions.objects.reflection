@@ -37,7 +37,7 @@ public static partial class ObjectReflectionExtension
     /// <param name="source">The object to convert.</param>
     /// <returns>A dictionary of property names (or JSON names) to values.</returns>
     [Pure]
-    public static Dictionary<string, object?> ToDictionary(this object? source)
+    public static Dictionary<string, object?> ToDictionaryViaReflection(this object? source)
     {
         if (source is null)
             return new Dictionary<string, object?>();
@@ -195,7 +195,7 @@ public static partial class ObjectReflectionExtension
     /// </summary>
     /// <param name="obj">The object to inspect for null properties. Can be null.</param>
     /// <param name="logger">The logger to use for logging null properties.</param>
-    public static void LogNullProperties(this object? obj, ILogger logger)
+    public static void LogNullPropertiesViaReflection(this object? obj, ILogger logger)
     {
         if (obj is null)
         {
@@ -234,7 +234,7 @@ public static partial class ObjectReflectionExtension
     /// </summary>
     /// <param name="obj">The object to inspect for null properties.</param>
     /// <param name="logger">The logger to use for logging the null properties.</param>
-    public static void LogNullPropertiesRecursivelyAsJson(this object? obj, ILogger logger)
+    public static void LogNullPropertiesRecursivelyAsJsonViaReflection(this object? obj, ILogger logger)
     {
         if (obj is null)
         {
@@ -364,7 +364,7 @@ public static partial class ObjectReflectionExtension
     /// Example usage:
     /// <code>
     /// var person = new Person { Name = "Alice", Age = 30 };
-    /// string readableString = person.ToReadableString();
+    /// string readableString = person.ToReadableStringViaReflection();
     /// Console.WriteLine(readableString);
     /// </code>
     /// Output:
@@ -374,7 +374,7 @@ public static partial class ObjectReflectionExtension
     /// </code>
     /// </example>
     [Pure]
-    public static string ToReadableString(this object obj, int indentLevel = 0)
+    public static string ToReadableStringViaReflection(this object obj, int indentLevel = 0)
     {
         if (obj == null)
             return "null";

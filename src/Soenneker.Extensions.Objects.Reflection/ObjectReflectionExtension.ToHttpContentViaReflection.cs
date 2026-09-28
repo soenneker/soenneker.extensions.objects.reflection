@@ -20,7 +20,7 @@ public static partial class ObjectReflectionExtension
     [Pure]
     [RequiresUnreferencedCode("Reflection-based serialization may require types that cannot be statically analyzed. Use the JsonTypeInfo overload in Soenneker.Extensions.Object instead.")]
     [RequiresDynamicCode("Reflection-based serialization may require runtime code generation. Use the JsonTypeInfo overload in Soenneker.Extensions.Object instead.")]
-    public static HttpContent ToHttpContent(this object? obj)
+    public static HttpContent ToHttpContentViaReflection(this object? obj)
     {
         byte[] utf8Bytes = obj is null ? _emptyByteArray : JsonUtil.SerializeToUtf8Bytes(obj);
         return new ByteArrayContent(utf8Bytes)

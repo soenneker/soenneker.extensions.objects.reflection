@@ -53,22 +53,22 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public void LogNullProperties_should_log()
+    public void LogNullPropertiesViaReflection_should_log()
     {
         var obj = AutoFaker.Generate<UserDto>();
         obj.Address.AdditionalInfo = null;
 
-        obj.LogNullProperties(Logger);
+        obj.LogNullPropertiesViaReflection(Logger);
     }
 
     [Test]
-    public void LogNullPropertiesRecursivelyAsJson_should_log()
+    public void LogNullPropertiesRecursivelyAsJsonViaReflection_should_log()
     {
         var obj = AutoFaker.Generate<UserDto>();
         obj.Address.AdditionalInfo = null!;
         obj.PhoneNumber = null!;
 
-        obj.LogNullPropertiesRecursivelyAsJson(Logger);
+        obj.LogNullPropertiesRecursivelyAsJsonViaReflection(Logger);
     }
 
     private sealed class QueryNameModel
@@ -78,20 +78,20 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public void ToFormUrlEncodedContent_should_throw_on_null()
+    public void ToFormUrlEncodedContentViaReflection_should_throw_on_null()
     {
         object? obj = null;
 
-        Action act = () => obj!.ToFormUrlEncodedContent();
+        Action act = () => obj!.ToFormUrlEncodedContentViaReflection();
         act.Should().Throw<ArgumentNullException>();
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_create_content()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_create_content()
     {
         var obj = new { Name = "Test", Value = 123 };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         result.Should().NotBeNull();
 
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
@@ -100,11 +100,11 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_use_json_property_name()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_use_json_property_name()
     {
         var user = AutoFaker.Generate<UserDto>();
 
-        var result = user.ToFormUrlEncodedContent();
+        var result = user.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         // Should use "firstName" from JsonPropertyName attribute, not "FirstName"
@@ -116,23 +116,23 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_skip_null_properties()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_skip_null_properties()
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = null;
 
-        var result = user.ToFormUrlEncodedContent();
+        var result = user.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         content.Should().NotContain("firstName");
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_bool_values()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_bool_values()
     {
         var obj = new { IsActive = true, IsDeleted = false };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         content.Should().Contain("IsActive=true");
@@ -140,7 +140,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_numeric_types()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_numeric_types()
     {
         var obj = new
         {
@@ -150,7 +150,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
             FloatValue = 10.5f
         };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         content.Should().Contain("IntValue=42");
@@ -160,12 +160,12 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_datetime()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_datetime()
     {
         var dateTime = new DateTime(2024, 1, 15, 10, 30, 0);
         var obj = new { CreatedAt = dateTime };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         // DateTime should be formatted using InvariantCulture
@@ -174,33 +174,33 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_empty_object()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_empty_object()
     {
         var obj = new { };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         content.Should().BeEmpty();
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_object_with_all_null_properties()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_object_with_all_null_properties()
     {
         var obj = new { Name = (string?)null, Value = (int?)null };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         content.Should().BeEmpty();
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_string_with_special_characters()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_string_with_special_characters()
     {
         var obj = new { Message = "Hello & World" };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         // FormUrlEncodedContent should URL-encode special characters
@@ -208,7 +208,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_handle_multiple_properties()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_multiple_properties()
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = "John";
@@ -216,7 +216,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
         user.IsActive = true;
         user.UserId = 123;
 
-        var result = user.ToFormUrlEncodedContent();
+        var result = user.ToFormUrlEncodedContentViaReflection();
         string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
 
         content.Should().Contain("firstName=John");
@@ -226,11 +226,11 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContent_should_have_correct_content_type()
+    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_have_correct_content_type()
     {
         var obj = new { Name = "Test" };
 
-        var result = obj.ToFormUrlEncodedContent();
+        var result = obj.ToFormUrlEncodedContentViaReflection();
         result.Headers.ContentType!.MediaType.Should().Be("application/x-www-form-urlencoded");
     }
 }
