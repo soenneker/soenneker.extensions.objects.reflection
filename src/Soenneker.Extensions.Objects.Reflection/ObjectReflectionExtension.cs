@@ -106,7 +106,7 @@ public static partial class ObjectReflectionExtension
     /// <remarks>This string's first character is a question mark (unless the object is null, then it's null)</remarks>
     /// <returns>If object is null, returns an empty string.</returns>
     [Pure]
-    public static string ToQueryString(this object? obj)
+    public static string ToQueryStringViaCachedReflection(this object? obj)
     {
         if (obj is null)
             return "";

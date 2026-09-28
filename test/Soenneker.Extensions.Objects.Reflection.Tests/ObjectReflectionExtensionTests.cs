@@ -25,29 +25,29 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public void ToQueryString_handles_null()
+    public void ToQueryStringViaCachedReflection_handles_null()
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = null;
 
-        string result = user.ToQueryString();
+        string result = user.ToQueryStringViaCachedReflection();
         result.Should().NotContain("firstName");
     }
 
     [Test]
-    public void ToQueryString_lowercase_bool()
+    public void ToQueryStringViaCachedReflection_lowercase_bool()
     {
         var user = AutoFaker.Generate<UserDto>();
         user.IsActive = true;
 
-        string result = user.ToQueryString();
+        string result = user.ToQueryStringViaCachedReflection();
         result.Should().NotContain("True");
     }
 
     [Test]
-    public void ToQueryString_escapes_json_property_names()
+    public void ToQueryStringViaCachedReflection_escapes_json_property_names()
     {
-        string result = new QueryNameModel {Value = "safe"}.ToQueryString();
+        string result = new QueryNameModel {Value = "safe"}.ToQueryStringViaCachedReflection();
 
         result.Should().Be("?name%26admin=safe");
     }

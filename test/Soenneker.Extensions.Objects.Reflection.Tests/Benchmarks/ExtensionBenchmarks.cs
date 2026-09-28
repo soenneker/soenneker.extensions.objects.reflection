@@ -23,9 +23,9 @@ public class ExtensionBenchmarks
     }
 
     [Benchmark]
-    public string ToQueryString()
+    public string ToQueryStringViaCachedReflection()
     {
-        return _userDto.ToQueryString();
+        return _userDto.ToQueryStringViaCachedReflection();
     }
 
     [Benchmark]

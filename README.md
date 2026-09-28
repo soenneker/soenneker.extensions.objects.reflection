@@ -21,12 +21,12 @@ string query = new SearchRequest
 {
     Page = 2,
     IncludeArchived = false
-}.ToQueryString();
+}.ToQueryStringViaCachedReflection();
 
 // ?page=2&includeArchived=false
 ```
 
-`ToQueryString()` uses readable public instance properties, `[JsonPropertyName]` or web-default camelCase names, and percent-escapes both names and values. It honors `[JsonIgnore]` conditions, formats scalar values invariantly, and JSON-formats other values before escaping. A null object or an object with no included values returns an empty string.
+`ToQueryStringViaCachedReflection()` uses readable public instance properties, `[JsonPropertyName]` or web-default camelCase names, and percent-escapes both names and values. It honors `[JsonIgnore]` conditions, formats scalar values invariantly, and JSON-formats other values before escaping. A null object or an object with no included values returns an empty string.
 
 `ToQueryStringViaReflection()` is the simpler legacy path: it uses CLR property names, optionally lowercases them, calls `ToString()` under the current culture, skips nulls, and escapes names and values. Both methods prepend `?` when at least one pair is emitted.
 
