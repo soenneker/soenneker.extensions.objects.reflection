@@ -22,11 +22,11 @@ namespace Soenneker.Extensions.Objects.Reflection;
 /// </summary>
 public static partial class ObjectReflectionExtension
 {
-    private static readonly ConcurrentDictionary<System.Type, (PropertyInfo[] Props, string[] Names)> _declaredPropCache = new();
-    private static readonly ConcurrentDictionary<System.Type, PropertyInfo[]> _publicPropCache = new();
-    private static readonly ConcurrentDictionary<System.Type, QueryProperty[]> _queryPropertyCache = new();
+    private static readonly ConcurrentDictionary<Type, (PropertyInfo[] Props, string[] Names)> _declaredPropCache = new();
+    private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _publicPropCache = new();
+    private static readonly ConcurrentDictionary<Type, QueryProperty[]> _queryPropertyCache = new();
 
-    private sealed record QueryProperty(string Name, Func<object, object?> Getter, JsonIgnoreCondition IgnoreCondition, System.Type PropertyType,
+    private sealed record QueryProperty(string Name, Func<object, object?> Getter, JsonIgnoreCondition IgnoreCondition, Type PropertyType,
         object? DefaultValue);
 
     /// <summary>
@@ -44,7 +44,7 @@ public static partial class ObjectReflectionExtension
         if (source is null)
             return new Dictionary<string, object?>();
 
-        System.Type type = source.GetType();
+        Type type = source.GetType();
 
         (PropertyInfo[] props, string[] names) = GetDeclaredProperties(type);
 
@@ -71,7 +71,7 @@ public static partial class ObjectReflectionExtension
         if (obj is null)
             return string.Empty;
 
-        System.Type type = obj.GetType();
+        Type type = obj.GetType();
         PropertyInfo[] props = GetReadablePublicProperties(type);
 
         using var sb = new PooledStringBuilder();
@@ -137,7 +137,7 @@ public static partial class ObjectReflectionExtension
     }
 
     [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
-    private static QueryProperty[] CreateQueryProperties(System.Type type)
+    private static QueryProperty[] CreateQueryProperties(Type type)
     {
         PropertyInfo[] properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
         var result = new List<QueryProperty>(properties.Length);
@@ -215,7 +215,7 @@ public static partial class ObjectReflectionExtension
         if (!logger.IsEnabled(LogLevel.Information))
             return;
 
-        System.Type objectType = obj.GetType();
+        Type objectType = obj.GetType();
         PropertyInfo[] properties = GetReadablePublicProperties(objectType);
         var nullProperties = new List<string>(properties.Length);
 
@@ -255,7 +255,7 @@ public static partial class ObjectReflectionExtension
         if (!logger.IsEnabled(LogLevel.Information))
             return;
 
-        System.Type objectType = obj.GetType();
+        Type objectType = obj.GetType();
 
         Dictionary<string, object?> nullPropertiesTree = GetNullPropertiesTree(obj, objectType,
             new HashSet<object>(ReferenceEqualityComparer.Instance));
@@ -272,7 +272,7 @@ public static partial class ObjectReflectionExtension
     }
 
     [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
-    private static Dictionary<string, object?> GetNullPropertiesTree(object obj, System.Type objectType, HashSet<object> visited)
+    private static Dictionary<string, object?> GetNullPropertiesTree(object obj, Type objectType, HashSet<object> visited)
     {
         // Pre-allocate dictionary capacity based on property count
         PropertyInfo[] properties = GetReadablePublicProperties(objectType);
@@ -283,7 +283,7 @@ public static partial class ObjectReflectionExtension
 
         // Don't descend into most framework types (except we still handle IEnumerable separately below)
         // This avoids spelunking into things like List<T> internals via properties.
-        static bool IsFrameworkLeaf(System.Type t) => t.Namespace is string ns &&
+        static bool IsFrameworkLeaf(Type t) => t.Namespace is string ns &&
                                                       (ns.StartsWith("System", StringComparison.Ordinal) ||
                                                        ns.StartsWith("Microsoft", StringComparison.Ordinal));
 
@@ -318,7 +318,7 @@ public static partial class ObjectReflectionExtension
                         continue;
                     }
 
-                    System.Type itemType = item.GetType();
+                    Type itemType = item.GetType();
                     if (IsFrameworkLeaf(itemType))
                     {
                         // We don't reflect into framework types here; only record nulls of nested objects,
@@ -340,7 +340,7 @@ public static partial class ObjectReflectionExtension
             // 2) Complex reference types (non-value, non-string)
             if (!prop.PropertyType.IsValueType && prop.PropertyType != typeof(string))
             {
-                System.Type valueType = value.GetType();
+                Type valueType = value.GetType();
 
                 // Avoid descending into most framework types (e.g., DateTimeOffset, Uri, List<T> internals, etc.)
                 if (IsFrameworkLeaf(valueType))
@@ -412,7 +412,7 @@ public static partial class ObjectReflectionExtension
             return;
         }
 
-        System.Type type = obj.GetType();
+        Type type = obj.GetType();
         PropertyInfo[] properties = GetReadablePublicProperties(type);
         int indentLength = indentLevel * 2;
         ArgumentOutOfRangeException.ThrowIfNegative(indentLength, "count");
@@ -456,7 +456,7 @@ public static partial class ObjectReflectionExtension
     }
 
     [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
-    private static PropertyInfo[] GetReadablePublicProperties(System.Type type) =>
+    private static PropertyInfo[] GetReadablePublicProperties(Type type) =>
         _publicPropCache.GetOrAdd(type, static t =>
         {
             PropertyInfo[] raw = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
@@ -486,7 +486,7 @@ public static partial class ObjectReflectionExtension
         });
 
     [RequiresUnreferencedCode("Inspects properties of runtime types that cannot be statically analyzed. Preserve the reflected properties when trimming.")]
-    private static (PropertyInfo[] Props, string[] Names) GetDeclaredProperties(System.Type type) =>
+    private static (PropertyInfo[] Props, string[] Names) GetDeclaredProperties(Type type) =>
         _declaredPropCache.GetOrAdd(type, static t =>
         {
             PropertyInfo[] raw = t.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);

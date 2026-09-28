@@ -14,7 +14,7 @@ namespace Soenneker.Extensions.Objects.Reflection;
 /// </summary>
 public static partial class ObjectReflectionExtension
 {
-    private static readonly ConcurrentDictionary<System.Type, (PropertyInfo[] Props, string[] Names)> _formUrlEncodedPropCache = new();
+    private static readonly ConcurrentDictionary<Type, (PropertyInfo[] Props, string[] Names)> _formUrlEncodedPropCache = new();
 
     /// <summary>
     /// Converts an object into FormUrlEncodedContent using reflection,
@@ -28,7 +28,7 @@ public static partial class ObjectReflectionExtension
         if (obj is null)
             throw new ArgumentNullException(nameof(obj));
 
-        System.Type type = obj.GetType();
+        Type type = obj.GetType();
 
         // Cache properties and names
         (PropertyInfo[] props, string[] names) = _formUrlEncodedPropCache.GetOrAdd(type, static t =>
