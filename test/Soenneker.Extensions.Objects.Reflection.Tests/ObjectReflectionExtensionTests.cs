@@ -87,7 +87,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_create_content()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_create_content()
     {
         var obj = new { Name = "Test", Value = 123 };
 
@@ -100,7 +100,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_use_json_property_name()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_use_json_property_name()
     {
         var user = AutoFaker.Generate<UserDto>();
 
@@ -116,7 +116,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_skip_null_properties()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_skip_null_properties()
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = null;
@@ -128,7 +128,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_bool_values()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_bool_values()
     {
         var obj = new { IsActive = true, IsDeleted = false };
 
@@ -140,7 +140,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_numeric_types()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_numeric_types()
     {
         var obj = new
         {
@@ -160,7 +160,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_datetime()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_datetime()
     {
         var dateTime = new DateTime(2024, 1, 15, 10, 30, 0);
         var obj = new { CreatedAt = dateTime };
@@ -174,7 +174,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_empty_object()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_empty_object()
     {
         var obj = new { };
 
@@ -185,7 +185,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_object_with_all_null_properties()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_object_with_all_null_properties()
     {
         var obj = new { Name = (string?)null, Value = (int?)null };
 
@@ -196,7 +196,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_string_with_special_characters()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_string_with_special_characters()
     {
         var obj = new { Message = "Hello & World" };
 
@@ -208,7 +208,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_handle_multiple_properties()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_multiple_properties()
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = "John";
@@ -226,7 +226,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToFormUrlEncodedContentViaReflection_should_have_correct_content_type()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_have_correct_content_type()
     {
         var obj = new { Name = "Test" };
 

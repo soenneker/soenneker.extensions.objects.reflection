@@ -8,7 +8,7 @@ namespace Soenneker.Extensions.Objects.Reflection.Tests;
 public class HttpContentReflectionTests
 {
     [Test]
-    public async System.Threading.Tasks.Task ToHttpContentViaReflection_serializes_anonymous_objects()
+    public async System.Threading.Tasks.ValueTask ToHttpContentViaReflection_serializes_anonymous_objects()
     {
         var payload = new { Query = "mutation", Variables = new { RepositoryId = "node\"id", Enabled = false } };
         using HttpContent content = payload.ToHttpContentViaReflection();
@@ -22,7 +22,7 @@ public class HttpContentReflectionTests
     }
 
     [Test]
-    public async System.Threading.Tasks.Task ToHttpContentViaReflection_returns_empty_json_content_for_null()
+    public async System.Threading.Tasks.ValueTask ToHttpContentViaReflection_returns_empty_json_content_for_null()
     {
         using HttpContent content = ((object?)null).ToHttpContentViaReflection();
 

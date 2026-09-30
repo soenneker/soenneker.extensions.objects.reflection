@@ -14,7 +14,7 @@ public class BenchmarkTestRunner : BenchmarkTest
 
     [Skip("Manual")]
     //[LocalOnly]
-    public async System.Threading.Tasks.Task ExtensionBenchmarks()
+    public async System.Threading.Tasks.ValueTask ExtensionBenchmarks()
     {
         Summary summary = BenchmarkRunner.Run<ExtensionBenchmarks>(DefaultConf);
 
