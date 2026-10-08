@@ -4,6 +4,7 @@ using Soenneker.Tests.HostedUnit;
 using Soenneker.Utils.Json;
 using System;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace Soenneker.Extensions.Objects.Reflection.Tests;
 
@@ -87,25 +88,25 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_create_content()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_create_content(CancellationToken cancellationToken)
     {
         var obj = new { Name = "Test", Value = 123 };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
         result.Should().NotBeNull();
 
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
         content.Should().Contain("Name=Test");
         content.Should().Contain("Value=123");
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_use_json_property_name()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_use_json_property_name(CancellationToken cancellationToken)
     {
         var user = AutoFaker.Generate<UserDto>();
 
         var result = user.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         // Should use "firstName" from JsonPropertyName attribute, not "FirstName"
         if (user.FirstName != null)
@@ -116,31 +117,31 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_skip_null_properties()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_skip_null_properties(CancellationToken cancellationToken)
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = null;
 
         var result = user.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         content.Should().NotContain("firstName");
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_bool_values()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_bool_values(CancellationToken cancellationToken)
     {
         var obj = new { IsActive = true, IsDeleted = false };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         content.Should().Contain("IsActive=true");
         content.Should().Contain("IsDeleted=false");
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_numeric_types()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_numeric_types(CancellationToken cancellationToken)
     {
         var obj = new
         {
@@ -151,7 +152,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
         };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         content.Should().Contain("IntValue=42");
         content.Should().Contain("DecimalValue=123.45");
@@ -160,13 +161,13 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_datetime()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_datetime(CancellationToken cancellationToken)
     {
         var dateTime = new DateTime(2024, 1, 15, 10, 30, 0);
         var obj = new { CreatedAt = dateTime };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         // DateTime should be formatted using InvariantCulture
         content.Should().Contain("CreatedAt=");
@@ -174,41 +175,41 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_empty_object()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_empty_object(CancellationToken cancellationToken)
     {
         var obj = new { };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         content.Should().BeEmpty();
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_object_with_all_null_properties()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_object_with_all_null_properties(CancellationToken cancellationToken)
     {
         var obj = new { Name = (string?)null, Value = (int?)null };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         content.Should().BeEmpty();
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_string_with_special_characters()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_string_with_special_characters(CancellationToken cancellationToken)
     {
         var obj = new { Message = "Hello & World" };
 
         var result = obj.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         // FormUrlEncodedContent should URL-encode special characters
         content.Should().Contain("Message=");
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_multiple_properties()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_handle_multiple_properties(CancellationToken cancellationToken)
     {
         var user = AutoFaker.Generate<UserDto>();
         user.FirstName = "John";
@@ -217,7 +218,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
         user.UserId = 123;
 
         var result = user.ToFormUrlEncodedContentViaReflection();
-        string content = await result.ReadAsStringAsync(System.Threading.CancellationToken.None);
+        string content = await result.ReadAsStringAsync(cancellationToken);
 
         content.Should().Contain("firstName=John");
         content.Should().Contain("LastName=Doe");
@@ -226,7 +227,7 @@ public class ObjectReflectionExtensionTests : HostedUnitTest
     }
 
     [Test]
-    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_have_correct_content_type()
+    public async System.Threading.Tasks.ValueTask ToFormUrlEncodedContentViaReflection_should_have_correct_content_type(CancellationToken cancellationToken)
     {
         var obj = new { Name = "Test" };
 
