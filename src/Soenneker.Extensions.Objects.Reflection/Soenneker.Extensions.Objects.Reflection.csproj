@@ -3,6 +3,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net11.0</TargetFramework>
+        <Features Condition="'$(TargetFramework)' == 'net11.0'">$(Features);runtime-async=on</Features>
         <IsAotCompatible>true</IsAotCompatible>
         <Nullable>enable</Nullable>
         <Platforms>AnyCPU</Platforms>
@@ -45,7 +46,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Soenneker.Extensions.Enumerable.String" Version="11.0.1501" />
-        <PackageReference Include="Soenneker.Utils.Json" Version="11.0.2763" />
+        <PackageReference Include="Soenneker.Utils.Json" Version="11.0.2764" />
         <PackageReference Include="Soenneker.Extensions.String" Version="4.0.800" />
         <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="11.0.44" />
     </ItemGroup>
