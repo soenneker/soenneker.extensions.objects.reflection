@@ -44,9 +44,9 @@
         <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Soenneker.Extensions.Enumerable.String" Version="4.0.1498" />
-        <PackageReference Include="Soenneker.Utils.Json" Version="4.0.2757" />
+        <PackageReference Include="Soenneker.Extensions.Enumerable.String" Version="11.0.1501" />
+        <PackageReference Include="Soenneker.Utils.Json" Version="11.0.2762" />
         <PackageReference Include="Soenneker.Extensions.String" Version="4.0.800" />
-        <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="4.0.43" />
+        <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="11.0.44" />
     </ItemGroup>
 </Project>
