@@ -46,7 +46,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Soenneker.Extensions.Enumerable.String" Version="11.0.1504" />
-        <PackageReference Include="Soenneker.Utils.Json" Version="11.0.2774" />
+        <PackageReference Include="Soenneker.Utils.Json" Version="11.0.2776" />
         <PackageReference Include="Soenneker.Extensions.String" Version="11.0.809" />
         <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="11.0.45" />
     </ItemGroup>
