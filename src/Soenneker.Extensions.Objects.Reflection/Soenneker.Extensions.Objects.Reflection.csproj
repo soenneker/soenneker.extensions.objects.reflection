@@ -48,6 +48,6 @@
         <PackageReference Include="Soenneker.Extensions.Enumerable.String" Version="11.0.1522" />
         <PackageReference Include="Soenneker.Utils.Json" Version="11.0.2794" />
         <PackageReference Include="Soenneker.Extensions.String" Version="11.0.824" />
-        <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="11.0.46" />
+        <PackageReference Include="Soenneker.Utils.PooledStringBuilders" Version="11.0.47" />
     </ItemGroup>
 </Project>
